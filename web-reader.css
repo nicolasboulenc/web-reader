@@ -1,0 +1,120 @@
+
+:root {
+    --toolbar-height: 1.2rem;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100vw;
+    height: 100svh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+#toolbar {
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    height: var(--toolbar-height);
+}
+
+#settings {
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    left: 100vw;
+    background-color: blue;
+    transition-property: left;
+    transition-duration: 3s;
+    transition-delay: 0s;
+}
+
+#settings.active {
+    left: 0;
+}
+
+#content {
+    padding-top: var(--toolbar-height);
+    padding-left: 12vw;
+    padding-right: 12vw;
+}
+
+
+.Day {
+    background-color: white;
+    color: black;
+}
+
+.Night {
+    background-color: black;
+    color: darkgray;
+}
+
+.Sepia {
+    background-color: cornsilk;
+    color: saddlebrown;
+}
+
+.Twilight {
+    background-color: darkslategray;
+    color: skyblue;
+}
+
+.Console {
+    background-color: darkslategray;
+    color: green;
+}
+
+.Arial {
+    font-family: Arial, sans-serif;
+}
+
+.Helvetica {
+    font-family: Helvetica, sans-serif;
+}
+
+.Georgia {
+    font-family: Georgia, serif;
+}
+
+.Verdana {
+    font-family: Verdana, sans-serif;
+}
+
+.xx-small {
+    font-size: xx-small;
+}
+
+.x-small {
+    font-size: x-small;
+}
+
+.small {
+    font-size: small;
+}
+
+.medium {
+    font-size: medium;
+}
+
+.large {
+    font-size: large;
+}
+
+.x-large {
+    font-size: x-large;
+}
+
+.xx-large {
+    font-size: xx-large;
+}
+
+.xxx-large { 
+    font-size: xxx-large;
+}
