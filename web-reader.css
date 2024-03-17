@@ -1,12 +1,13 @@
 
 :root {
-    --toolbar-height: 1.2rem;
+    --toolbar-height: 32px;
 }
 
 html {
     margin: 0;
     padding: 0;
 }
+
 
 body {
     width: 100vw;
@@ -15,29 +16,60 @@ body {
     overflow-x: hidden;
 }
 
-#toolbar {
+
+#hamburger {
     position: fixed;
-    width: 100vw;
+    z-index: 30;
     top: 0;
     left: 0;
-    z-index: 10;
+    width: var(--toolbar-height);
     height: var(--toolbar-height);
+    font-family: monospace;
+    background-color: aqua;
 }
 
-#settings {
-    position: absolute;
+
+#toolbar {
+    position: fixed;
     z-index: 20;
     top: 0;
-    left: 100vw;
-    background-color: blue;
-    transition-property: left;
-    transition-duration: 3s;
-    transition-delay: 0s;
+    left: 0;
+    width: 100vw;
+    height: var(--toolbar-height);
+    background-color: darkblue;
 }
+
+
+#settings {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: -50vw;
+    width: 50vw;
+    height: 100vh;
+    padding-top: var(--toolbar-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: slateblue;
+    transition-property: left;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in-out;
+}
+
+
+#settings > div {
+    display: flex;
+    width: 48vw;
+    justify-content: space-around;
+    margin: 0.5em;
+}
+
 
 #settings.active {
     left: 0;
 }
+
 
 #content {
     padding-top: var(--toolbar-height);
@@ -46,9 +78,16 @@ body {
 }
 
 
-.Day {
+/* color themes */
+
+.Day > #content {
     background-color: white;
     color: black;
+}
+
+.Day > #toolbar {
+    background-color: black;
+    color: white;
 }
 
 .Night {
@@ -61,15 +100,23 @@ body {
     color: saddlebrown;
 }
 
-.Twilight {
+.Twilight > #content{
     background-color: darkslategray;
     color: skyblue;
+}
+
+.Twilight > #toolbar{
+    background-color: skyblue;
+    color: darkslategray;
 }
 
 .Console {
     background-color: darkslategray;
     color: green;
 }
+
+
+/* fonts */
 
 .Arial {
     font-family: Arial, sans-serif;
@@ -86,6 +133,9 @@ body {
 .Verdana {
     font-family: Verdana, sans-serif;
 }
+
+
+/* sizes */
 
 .xx-small {
     font-size: xx-small;

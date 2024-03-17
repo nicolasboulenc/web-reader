@@ -2,7 +2,7 @@
 
 
 const app = {
-    lines: null,
+    markers: null,
     themes: ["Day", "Night", "Sepia", "Twilight", "Console"],
     theme: "Twilight",
     fonts: ["Arial", "Helvetica", "Georgia", "Verdana"],
@@ -20,8 +20,6 @@ async function init() {
     document.querySelector("#content").classList.add(app.theme)
 
     document.querySelector("#hamburger").addEventListener("click", ham_onclick)
-
-
 
     const theme_elem = document.querySelector("#color-theme")
     theme_elem.addEventListener("change", theme_onchange)
@@ -58,12 +56,17 @@ async function init() {
     const response = await fetch("./pg2701.txt")
     let text = await response.text()
 
-    text = text.replaceAll("\r\n\r\n", rep_gap)
-    text = "<span>" + text.replaceAll("\r\n", rep_newline) + "</span>"
+
+    // const sep = "\r\n"  // windows
+    const sep = "\n"    // linux
+
+
+    text = text.replaceAll(sep+sep, rep_gap)
+    text = "<span>" + text.replaceAll(sep, rep_newline) + "</span>"
 
     document.querySelector("#content").innerHTML = `${text}`
     
-    app.lines = document.querySelectorAll("span")
+    app.markers = document.querySelectorAll("span")
 }
 
 
@@ -79,17 +82,20 @@ function rep_gap(match, offset, text) {
 
 function onscrollend(evt) {
 
-    const res = find1()
-    console.log(res)
+    const res2 = find2()
+    console.log(res2)
+
+    let percent = (document.documentElement.scrollTop + res2.top + document.documentElement.clientHeight / 2) / document.documentElement.scrollHeight
+    percent = (percent * 100).toFixed(1)
+    console.log(percent)
 }
 
 
 function theme_onchange(evt) {
 
     const theme = evt.target.value
-    const content = document.querySelector("#content")
-    content.classList.remove(app.theme)
-    content.classList.add(theme)
+    document.body.classList.remove(app.theme)
+    document.body.classList.add(theme)
     app.theme = theme
 }
 
@@ -113,17 +119,28 @@ function size_onchange(evt) {
 }
 
 function ham_onclick(evt) {
-    document.querySelector("#settings").classList.add("active")
+
+    const settings_elem = document.querySelector("#settings")
+    const ham_elem = document.querySelector("#hamburger")
+
+    if(settings_elem.classList.contains("active") === true) {
+        settings_elem.classList.remove("active")
+        ham_elem.innerHTML = ">"
+    }
+    else {
+        settings_elem.classList.add("active")
+        ham_elem.innerHTML = "<"
+    }
 }
 
 
 function find1() {
     
     let ite = 0
-    for(const elem of app.lines) {
+    for(const elem of app.markers) {
         const bbox = elem.getBoundingClientRect()
         if(bbox.top > 0) {
-            return { ite: ite, id: elem.id, text: elem.innerHTML }
+            return { ite: ite, id: elem.id, top: bbox.top, text: elem.innerHTML }
         }
         ite++
     }    
@@ -132,15 +149,41 @@ function find1() {
 
 function find2() {
     
+    const value = 0
     let ite = 0
-    let i = elems.length
-    let bbox = { top: -1 }
 
-    while(bbox.top < 0) {
-        const bbox = elem.getBoundingClientRect()
-        if(bbox.top > 0) {
-            return { ite: ite, id: elem.id, text: elem.innerHTML }
+    if(app.markers[0].getBoundingClientRect().top > value) {
+        const elem = app.markers[0]
+        return { ite: ite, id: elem.id, top: elem.getBoundingClientRect().top, text: elem.innerHTML }
+    }
+
+    if(app.markers[app.markers.length - 1] < value) {
+        const elem = app.markers[app.markers.length - 1]
+        return { ite: ite, id: elem.id, top: elem.getBoundingClientRect().top, text: elem.innerHTML }
+    }
+
+    let lo = 0
+    let hi = app.markers.length - 1
+
+    while (lo <= hi) {
+        
+        const mid = Math.floor((hi + lo) / 2)
+        const mid_val = app.markers[mid].getBoundingClientRect().top 
+
+        if (mid_val > value) {
+            hi = mid - 1
+        } 
+        else if (mid_val < value) {
+            lo = mid + 1
+        } 
+        else {
+            // exact match
+            const elem = app.markers[mid]
+            return { ite: ite, id: elem.id, top: mid_val, text: elem.innerHTML }
         }
         ite++
-    }    
+    }
+    
+    let elem = app.markers[lo]
+    return { ite: ite, id: elem.id, top: elem.getBoundingClientRect().top, text: elem.innerHTML }
 }
