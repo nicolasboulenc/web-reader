@@ -8,17 +8,17 @@ const app = {
     fonts: ["Arial", "Helvetica", "Georgia", "Verdana"],
     font: "Arial",
     sizes: ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large"],
-    size: "medium"
+    size: "x-large"
 }
 
 init()
 
 
-async function init() {
+function init() {
+
+    load_content("./pg2701.txt")
 
     document.addEventListener("scrollend", onscrollend)
-    document.querySelector("#content").classList.add(app.theme)
-
     document.querySelector("#hamburger").addEventListener("click", ham_onclick)
 
     const theme_elem = document.querySelector("#color-theme")
@@ -51,22 +51,26 @@ async function init() {
         size_elem.appendChild(option)
     }
 
+    document.body.classList.add(app.theme)
+}
 
 
-    const response = await fetch("./pg2701.txt")
-    let text = await response.text()
+function load_content(url) {
+    fetch(url)
+    .then((response) => {
+        return response.text()
+    })
+    .then(text => {
+        // const sep = "\r\n"  // windows
+        const sep = "\n"    // linux
 
+        text = text.replaceAll(sep+sep, rep_gap)
+        text = "<span>" + text.replaceAll(sep, rep_newline) + "</span>"
 
-    // const sep = "\r\n"  // windows
-    const sep = "\n"    // linux
+        document.querySelector("#content").innerHTML = `${text}`
 
-
-    text = text.replaceAll(sep+sep, rep_gap)
-    text = "<span>" + text.replaceAll(sep, rep_newline) + "</span>"
-
-    document.querySelector("#content").innerHTML = `${text}`
-    
-    app.markers = document.querySelectorAll("span")
+        app.markers = document.querySelectorAll("span")
+    })
 }
 
 
@@ -187,3 +191,4 @@ function find2() {
     let elem = app.markers[lo]
     return { ite: ite, id: elem.id, top: elem.getBoundingClientRect().top, text: elem.innerHTML }
 }
+
