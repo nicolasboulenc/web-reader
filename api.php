@@ -12,11 +12,11 @@ else {
 
     $res = "";
 
-    if($_REQUEST["ep"] === "list-books") {
-        $res = '{ "result": "succes", "message": "This request", "books": [{"title": "Moby Dick; Or, The Whale"}] }';
+    if($_REQUEST["ep"] === "book-shelf") {
+        $res = '{ "result": "succes", "message": "This request", "books": [{"title": "Moby Dick; Or, The Whale", "author": "Herman Melville", "url": "pg2701.txt"}] }';
     }
-    else if($_REQUEST["ep"] === "get-book") {
-        $res = '{ "result": "succes", "message": "", "url": "", "bookmark": 0 }';
+    else if($_REQUEST["ep"] === "book") {
+        $res = '{ "result": "succes", "message": "", "url": "pg2701.txt", "bookmark": 0 }';
     }
     else if($_REQUEST["ep"] === "bookmark") {
         $res = '{ "result": "succes", "message": "" }';
@@ -26,7 +26,7 @@ else {
         header("Access-Control-Allow-Origin: *");
         header("Content-Type: application/json");
         echo "\n\n";
-        echo '{"result": "succes", "message": "this is a ' . $_SERVER["REQUEST_METHOD"] . ' request"}';
+        echo '' . $res . '';
     }
 }
 

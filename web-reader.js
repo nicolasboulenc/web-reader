@@ -8,7 +8,8 @@ const app = {
     fonts: ["Arial", "Helvetica", "Georgia", "Verdana"],
     font: "Arial",
     sizes: ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large"],
-    size: "x-large"
+    size: "x-large",
+    book_title: ""
 }
 
 init()
@@ -16,10 +17,12 @@ init()
 
 function init() {
 
-    load_content("./pg2701.txt")
+    load_shelf("api.php?ep=book-shelf")
+    // load_content("./pg2701.txt")
 
     document.addEventListener("scrollend", onscrollend)
-    document.querySelector("#hamburger").addEventListener("click", ham_onclick)
+    document.querySelector("#menu-button").addEventListener("click", menu_onclick)
+    document.querySelector("#back-button").addEventListener("click", back_onclick)
 
     const theme_elem = document.querySelector("#color-theme")
     theme_elem.addEventListener("change", theme_onchange)
@@ -55,25 +58,43 @@ function init() {
 }
 
 
+function load_shelf(url) {
+    fetch(url)
+    .then((response) => {
+        return response.json()
+    })
+    .then(json => {
+
+        const bookshelf = document.querySelector("#book-shelf")
+        for(const book of json.books) {
+            const div = document.createElement("div")
+            div.innerHTML = book.title
+            div.dataset["url"] = book.url
+            div.addEventListener("click", book_onclick)
+            bookshelf.appendChild(div)
+        }
+    })
+}
+
+
 function load_content(url) {
     fetch(url)
     .then((response) => {
         return response.text()
     })
     .then(text => {
-        const sep = "\r\n"  // windows
-        // const sep = "\n"    // linux
+        // const sep = "\r\n"  // windows
+        const sep = "\n"    // linux
 
         text = text.replaceAll(sep+sep, rep_gap)
         text = "<span>" + text.replaceAll(sep, rep_newline) + "</span>"
 
         const first = text.split("</span>")[0]
         const start = first.search("The Project Gutenberg eBook of ") + "The Project Gutenberg eBook of ".length
-        const title = first.substring(start, first.length)
+        app.book_title = first.substring(start, first.length)
 
-        console.log(title)
-        document.querySelector("#title").innerHTML = `${title}`
-        document.querySelector("#content").innerHTML = `${text}`
+        document.querySelector("#title").innerHTML = `${app.book_title} (0%)`
+        document.querySelector("#book-content").innerHTML = `${text}`
 
         app.markers = document.querySelectorAll("span")
     })
@@ -98,7 +119,7 @@ function onscrollend(evt) {
     let percent = (document.documentElement.scrollTop + res2.top + document.documentElement.clientHeight / 2) / document.documentElement.scrollHeight
     percent = (percent * 100).toFixed(0)
     console.log(percent)
-    document.querySelector("#progress").innerHTML = `${percent}%`
+    document.querySelector("#title").innerHTML = `${app.book_title} (${percent}%)`
 }
 
 
@@ -114,36 +135,49 @@ function theme_onchange(evt) {
 function font_onchange(evt) {
 
     const font = evt.target.value
-    const content = document.querySelector("#content")
+    const content = document.querySelector("#book-content")
     content.classList.remove(app.font)
     content.classList.add(font)
     app.font = font
 }
 
+
 function size_onchange(evt) {
 
     const size = evt.target.value
-    const content = document.querySelector("#content")
+    const content = document.querySelector("#book-content")
     content.classList.remove(app.size)
     content.classList.add(size)
     app.size = size
 }
 
-function ham_onclick(evt) {
+
+function menu_onclick(evt) {
 
     const settings_elem = document.querySelector("#settings")
     const ham_elem = document.querySelector("#hamburger")
 
     if(settings_elem.classList.contains("active") === true) {
         settings_elem.classList.remove("active")
-        ham_elem.innerHTML = ">"
     }
     else {
         settings_elem.classList.add("active")
-        ham_elem.innerHTML = "<"
     }
 }
 
+
+function back_onclick(evt) {
+    document.querySelector("#book-content").classList.add("dn")
+    document.querySelector("#book-shelf").classList.remove("dn")
+}
+
+function book_onclick(evt) {
+
+    const url = evt.currentTarget.dataset["url"]
+    load_content(url)
+    document.querySelector("#book-content").classList.remove("dn")
+    document.querySelector("#book-shelf").classList.add("dn")
+}
 
 function find1() {
     

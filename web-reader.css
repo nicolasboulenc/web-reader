@@ -18,11 +18,23 @@ body {
 }
 
 
-#hamburger {
+#back-button {
     position: fixed;
     z-index: 30;
     top: 0;
     left: 0;
+    width: var(--toolbar-height);
+    height: var(--toolbar-height);
+    font-family: monospace;
+    background-color: aqua;
+}
+
+
+#menu-button {
+    position: fixed;
+    z-index: 30;
+    top: 0;
+    right: 0;
     width: var(--toolbar-height);
     height: var(--toolbar-height);
     font-family: monospace;
@@ -36,16 +48,12 @@ body {
     top: 0;
     left: 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100vw;
     height: var(--toolbar-height);
     background-color: darkblue;
-    box-shadow: 0.3em 0.3em 1.0em #000;
-}
-
-#progress {
-    margin-right: 2em;
+    box-shadow: 0.1em 0.1em 1.0em #000;
 }
 
 
@@ -53,7 +61,7 @@ body {
     position: fixed;
     z-index: 10;
     top: var(--toolbar-height);
-    left: -51vw;
+    left: 100vw;
     width: 50vw;
     height: calc(100vh - var(--toolbar-height));
     padding-top: var(--toolbar-height);
@@ -76,20 +84,28 @@ body {
 
 
 #settings.active {
-    left: 0;
+    left: 50vw;
 }
 
 
-#content {
+#book-shelf {
+    padding-top: var(--toolbar-height);
+}
+
+#book-content {
     padding-top: var(--toolbar-height);
     padding-left: 12vw;
     padding-right: 12vw;
 }
 
+.dn {
+    display: none !important;
+}
+
 
 /* color themes */
 
-.Day > #content {
+.Day > #book-content {
     background-color: white;
     color: black;
 }
@@ -109,7 +125,7 @@ body {
     color: saddlebrown;
 }
 
-.Twilight > #content{
+.Twilight > #book-content{
     background-color: darkslategray;
     color: skyblue;
 }
