@@ -61,12 +61,18 @@ function load_content(url) {
         return response.text()
     })
     .then(text => {
-        // const sep = "\r\n"  // windows
-        const sep = "\n"    // linux
+        const sep = "\r\n"  // windows
+        // const sep = "\n"    // linux
 
         text = text.replaceAll(sep+sep, rep_gap)
         text = "<span>" + text.replaceAll(sep, rep_newline) + "</span>"
 
+        const first = text.split("</span>")[0]
+        const start = first.search("The Project Gutenberg eBook of ") + "The Project Gutenberg eBook of ".length
+        const title = first.substring(start, first.length)
+
+        console.log(title)
+        document.querySelector("#title").innerHTML = `${title}`
         document.querySelector("#content").innerHTML = `${text}`
 
         app.markers = document.querySelectorAll("span")
@@ -90,8 +96,9 @@ function onscrollend(evt) {
     console.log(res2)
 
     let percent = (document.documentElement.scrollTop + res2.top + document.documentElement.clientHeight / 2) / document.documentElement.scrollHeight
-    percent = (percent * 100).toFixed(1)
+    percent = (percent * 100).toFixed(0)
     console.log(percent)
+    document.querySelector("#progress").innerHTML = `${percent}%`
 }
 
 

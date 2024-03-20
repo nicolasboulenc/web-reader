@@ -35,23 +35,27 @@ body {
     z-index: 20;
     top: 0;
     left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100vw;
     height: var(--toolbar-height);
     background-color: darkblue;
-    box-shadow:
-        inset 0 -3em 3em rgb(0 200 0 / 30%),
-        0 0 0 2px white,
-        0.3em 0.3em 1em rgb(200 0 0 / 60%);
+    box-shadow: 0.3em 0.3em 1.0em #000;
+}
+
+#progress {
+    margin-right: 2em;
 }
 
 
 #settings {
     position: fixed;
     z-index: 10;
-    top: 0;
-    left: -50vw;
+    top: var(--toolbar-height);
+    left: -51vw;
     width: 50vw;
-    height: 100vh;
+    height: calc(100vh - var(--toolbar-height));
     padding-top: var(--toolbar-height);
     display: flex;
     flex-direction: column;
